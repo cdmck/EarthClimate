@@ -12,7 +12,7 @@ def calculate_energy(image):
 def find_seam(energy):
     rows, cols = energy.shape
     seam_energy = energy.copy()
-    backtrack = np.zeros_like(seam_energy, dtype=np.int)
+    backtrack = np.zeros_like(seam_energy, dtype=int)
 
     for i in range(1, rows):
         for j in range(cols):
@@ -30,7 +30,7 @@ def find_seam(energy):
 
 def remove_seam(image, backtrack):
     rows, cols, _ = image.shape
-    mask = np.ones((rows, cols), dtype=np.bool)
+    mask = np.ones((rows, cols), dtype=bool)
     j = np.argmin(backtrack[-1])
     for i in range(rows-1, -1, -1):
         mask[i, j] = False
@@ -48,12 +48,12 @@ def seam_carve(image, num_seams):
     return image
 
 # Load the image
-image = cv2.imread('C:\\Users\\cmcke\\OneDrive\\Desktop\\COS\\personal\\FlemingsWisp_Gualco_960.jpg')
+image = cv2.imread('C:\\Users\\cmcke\\OneDrive\\Desktop\\COS\\personal\\EarthClimateModel_VS\\FlemingsWisp_Gualco_960.jpg')
 if image is None:
     raise ValueError("image error")
 
 # Define the number of seams to remove
-num_seams = 50
+num_seams = 500
 
 # Perform seam carving
 carved_image = seam_carve(image, num_seams)
