@@ -28,105 +28,101 @@ carbonIntensityInit = 0.000222 * math.exp(-0.015 * (yearInit - 1980))
 
 SCC = 0
 
-# testing
+# Calculate deltaT
+deltaT = (earthTemp[224] - earthTemp[0]) * 1.05
 
-# for i, temp in enumerate(earthTemp[225:230]):
-#     # sum the socialWelfare for each year from 2024 to 4000 
-#     # to calculate the social cost of carbon
+# Calculate population growth rate (CI)
+popGrowthRate = 1.5 - 1.5 * (yearInit - 1990) / 80
 
-#     year = yearInit + i
-#     print(year)
+# Calculate production growth rate (CK)
+prodGrowthRate = (popGrowthRate + 2.2 - (2.2 - 0.33) * (yearInit - 2000) / 1000) - 0.001 * deltaT ** 2
 
-#     deltaT = (temp - earthTemp[1]) * 1.05 # current minus pre-industrial
-#     print(deltaT)
+# Calculate carbon intensity (CM)
+carbonIntensity = carbonIntensityInit * (1 - 0.01833) ** (yearInit - yearInit)
 
-#     popGrowthRate = 1.5 - 1.5 * (year - 1990) / 80 # % per year
-#     print(popGrowthRate)
+# Calculate carbon emissions (CN)
+carbonEmissions = carbonIntensity * globalProdInit * (1 - mu)
 
-#     globalPop = popInit * (1 + popGrowthRate/100) # 10^9 people
-#     print(globalPop)
+# Calculate damage function (CQ)
+damageFunction = 1 / (1 + 0.0018 * deltaT + 0.0023 * deltaT ** 2) * 0.97436
 
-#     prodGrowthRate = (popGrowthRate + 2.2 - (2.2-0.33) * ((year - 1) - 2000) / 1000) - 0.001 * deltaT ** 2  # % per year
-#     print(prodGrowthRate)
+# Calculate average carbon cost (CS)
+averageCarbonCost = (mu * Xmax) / 2
 
-#     globalProd = globalProdInit * (1 + prodGrowthRate/100) # 10^9 $ per year
-#     print(globalProd)
+# Calculate CO2 fraction (CT)
+co2frac = carbonIntensity * mu * averageCarbonCost
 
-#     carbonIntensity = carbonIntensityInit * (1 - 0.01833)**(year - 2024) # tons of carbon emitted per $ globalProd
-#     print(carbonIntensity)
+# Calculate consumption per capita (CU)
+consumPerCap = (globalProdInit / popInit) * damageFunction * (1 - co2frac)
 
-#     carbonEmissions = carbonIntensity * globalProd * (1 - mu) # 10^12 ton carbon per year
-#     print(carbonEmissions)
+# Calculate time preference (CV)
+timePref = 1 / ((1 + pureTimePrefFactor) ** (yearInit - yearInit))
 
-#     damageFunction = 1/(1 + 0.0018 * deltaT + 0.0023 * (deltaT)**2) * 0.97436
-#     print(damageFunction)
+# Calculate utility (CW)
+utility = (((consumPerCap ** (1 - ineqAverFactor)) / (1 - ineqAverFactor))) - ((9000 ** (1 - ineqAverFactor)) / (1 - ineqAverFactor))
 
-#     averageCarbonCost = (mu * Xmax) / 2 # $ per ton of carbon abated
-#     print(averageCarbonCost)
+# Calculate social welfare (CX)
+socialWelfare = timePref * popInit * utility
 
-#     co2frac = carbonIntensity * mu * averageCarbonCost # fraction of globalProd spent on CO2 emission reductions
-#     print(co2frac)
+# Sum the social welfare to get SCC
+SCC += socialWelfare
 
-#     consumPerCap = (globalProd / globalPop) * damageFunction * (1 - co2frac) # 1990 US $ per person per year
-#     print(consumPerCap)
+# For subsequent iterations, set mu, averageCarbonCost, and co2frac to 0
+mu = 0
+averageCarbonCost = 0
+co2frac = 0
+globalPop = popInit
+globalProd = globalProdInit
 
-#     timePref = 1 / ((1 + pureTimePrefFactor) ** (year - 2024)) # relative importance of each year
-#     print(timePref)
-
-#     utility = (((consumPerCap ** (1 - ineqAverFactor) / (1 - ineqAverFactor))) - (9000 ** (1 - ineqAverFactor) / (1 - ineqAverFactor))) # per capita welfare relative to a per capita income of $9000/yr
-#     print(utility)
-
-#     socialWelfare = timePref * globalPop * utility
-#     print(socialWelfare)
-
-#     SCC += socialWelfare
-#     print(SCC)
-
-#     popInit = globalPop
-#     globalProdInit = globalProd
-    
-# print(SCC)
-
-for i, temp in enumerate(earthTemp[224:]):
+for i, temp in enumerate(earthTemp[225:]):
     # sum the socialWelfare for each year from 2024 to 4000 
     # to calculate the social cost of carbon
 
     year = yearInit + i
 
-    deltaT = (temp - earthTemp[1]) * 1.05 # current minus pre-industrial
+    # Calculate deltaT
+    deltaT = (temp - earthTemp[0]) * 1.05
 
-    popGrowthRate = 1.5 - 1.5 * (year - 1990) / 80 # % per year
+    # Calculate population growth rate (CI)
+    popGrowthRate = 1.5 - 1.5 * (year - 1990) / 80
 
-    if i == 0:
-        globalPop = popInit
-        globalProd = globalProdInit
-    else:
-        globalPop *= (1 + popGrowthRate/100) # 10^9 people
-        globalProd *= (1 + prodGrowthRate/100) # 10^9 $ per year
+    # Calculate global population (CJ)
+    globalPop *= (1 + popGrowthRate / 100)
 
-    prodGrowthRate = (popGrowthRate + 2.2 - (2.2-0.33) * ((year - 1) - 2000) / 1000) - 0.001 * deltaT ** 2  # % per year
+    # Calculate production growth rate (CK)
+    prodGrowthRate = (popGrowthRate + 2.2 - (2.2 - 0.33) * (year - 2000) / 1000) - (0.001 * deltaT ** 2)
 
-    carbonIntensity = carbonIntensityInit * (1 - 0.01833)**(year - 2024) # tons of carbon emitted per $ globalProd
+    # Calculate global production (CL)
+    globalProd *= (1 + prodGrowthRate / 100)
 
-    carbonEmissions = carbonIntensity * globalProd * (1 - mu) # 10^12 ton carbon per year
+    # Calculate carbon intensity (CM)
+    carbonIntensity = carbonIntensityInit * (1 - 0.01833) ** (year - yearInit)
 
-    damageFunction = 1/(1 + 0.0018 * deltaT + 0.0023 * (deltaT)**2) * 0.97436
+    # Calculate carbon emissions (CN)
+    carbonEmissions = carbonIntensity * globalProd * (1 - mu)
 
-    averageCarbonCost = (mu * Xmax) / 2 # $ per ton of carbon abated
+    # Calculate damage function (CQ)
+    damageFunction = 1 / (1 + 0.0018 * deltaT + 0.0023 * deltaT ** 2) * 0.97436
 
-    co2frac = carbonIntensity * mu * averageCarbonCost # fraction of globalProd spent on CO2 emission reductions
+    # Calculate average carbon cost (CS)
+    averageCarbonCost = (mu * Xmax) / 2
 
-    consumPerCap = (globalProd / globalPop) * damageFunction * (1 - co2frac) # 1990 US $ per person per year
+    # Calculate CO2 fraction (CT)
+    co2frac = carbonIntensity * mu * averageCarbonCost
 
-    timePref = 1 / ((1 + pureTimePrefFactor) ** (year - 2024)) # relative importance of each year
+    # Calculate consumption per capita (CU)
+    consumPerCap = (globalProd / globalPop) * damageFunction * (1 - co2frac)
 
-    utility = (((consumPerCap ** (1 - ineqAverFactor) / (1 - ineqAverFactor))) - (9000 ** (1 - ineqAverFactor) / (1 - ineqAverFactor))) # per capita welfare relative to a per capita income of $9000/yr
+    # Calculate time preference (CV)
+    timePref = 1 / ((1 + pureTimePrefFactor) ** (year - yearInit + 1))
 
+    # Calculate utility (CW)
+    utility = (((consumPerCap ** (1 - ineqAverFactor)) / (1 - ineqAverFactor))) - ((9000 ** (1 - ineqAverFactor)) / (1 - ineqAverFactor))
+
+    # Calculate social welfare (CX)
     socialWelfare = timePref * globalPop * utility
 
+    # Sum the social welfare to get SCC
     SCC += socialWelfare
 
-    popInit = globalPop
-    globalProdInit = globalProd
-    
 print(SCC)
