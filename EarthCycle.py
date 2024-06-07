@@ -44,7 +44,7 @@ carbonIntensity = carbonIntensityInit * (1 - 0.01833) ** (yearInit - yearInit)
 carbonEmissions = carbonIntensity * globalProdInit * (1 - mu)
 
 # Calculate damage function (CQ)
-damageFunction = 1 / (1 + 0.0018 * deltaT + 0.0023 * deltaT ** 2) * 0.97436
+damageFunction = 1 / ((1 + (0.0018 * deltaT) + (0.0023 * (deltaT ** 2))) * 0.97436)
 
 # Calculate average carbon cost (CS)
 averageCarbonCost = (mu * Xmax) / 2
@@ -59,7 +59,7 @@ consumPerCap = (globalProdInit / popInit) * damageFunction * (1 - co2frac)
 timePref = 1 / ((1 + pureTimePrefFactor) ** (yearInit - yearInit))
 
 # Calculate utility (CW)
-utility = (((consumPerCap ** (1 - ineqAverFactor)) / (1 - ineqAverFactor))) - ((9000 ** (1 - ineqAverFactor)) / (1 - ineqAverFactor))
+utility = ((consumPerCap ** (1 - ineqAverFactor)) / (1 - ineqAverFactor)) - ((9000 ** (1 - ineqAverFactor)) / (1 - ineqAverFactor))
 
 # Calculate social welfare (CX)
 socialWelfare = timePref * popInit * utility
@@ -102,7 +102,7 @@ for i, temp in enumerate(earthTemp[225:]):
     carbonEmissions = carbonIntensity * globalProd * (1 - mu)
 
     # Calculate damage function (CQ)
-    damageFunction = 1 / (1 + 0.0018 * deltaT + 0.0023 * deltaT ** 2) * 0.97436
+    damageFunction = 1 / ((1 + (0.0018 * deltaT) + (0.0023 * (deltaT ** 2))) * 0.97436)
 
     # Calculate average carbon cost (CS)
     averageCarbonCost = (mu * Xmax) / 2
@@ -111,13 +111,13 @@ for i, temp in enumerate(earthTemp[225:]):
     co2frac = carbonIntensity * mu * averageCarbonCost
 
     # Calculate consumption per capita (CU)
-    consumPerCap = (globalProd / globalPop) * damageFunction * (1 - co2frac)
+    consumPerCap = (globalProd / globalPop) * damageFunction
 
     # Calculate time preference (CV)
     timePref = 1 / ((1 + pureTimePrefFactor) ** (year - yearInit + 1))
 
     # Calculate utility (CW)
-    utility = (((consumPerCap ** (1 - ineqAverFactor)) / (1 - ineqAverFactor))) - ((9000 ** (1 - ineqAverFactor)) / (1 - ineqAverFactor))
+    utility = ((consumPerCap ** (1 - ineqAverFactor)) / (1 - ineqAverFactor)) - ((9000 ** (1 - ineqAverFactor)) / (1 - ineqAverFactor))
 
     # Calculate social welfare (CX)
     socialWelfare = timePref * globalPop * utility
