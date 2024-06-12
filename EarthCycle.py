@@ -7,15 +7,12 @@ from decimal import Decimal, getcontext
 getcontext().prec = 20
 
 # load the earth climate model
-df = pd.read_excel('C:\\Users\\cmcke\\OneDrive\\Desktop\\COS\\personal\\EarthClimateModel_VS\\earthmodel.xlsx', sheet_name='Model', header=3)
+df = pd.read_excel('C:\\Users\\cmcke\\OneDrive\\Desktop\\COS\\personal\\earthmodel.xlsx', sheet_name='Model', header=3)
 
 # Command line arguments
 mu = Decimal(input("Enter the fractions of emissions avoided, mu (suggested range 0.01-0.10): "))
-print('\n')
-Xmax = Decimal(input("Enter the cost of the most expensive carbon emission reduction technology required to fully cut global carbon emissions, Xmax, in dollars per ton of carbon abated (suggested range 500-2500): ")) # Convert to Decimal
-print('\n')
+Xmax = Decimal(input("Enter the cost of the most expensive carbon emission reduction technology required to fully cut the global carbon emissions, Xmax, in dollars per ton of carbon abated (suggested range 500-2500): "))
 pureTimePrefFactor = Decimal(input("Enter the pure time preference factor (suggested range 0.001-0.020): "))
-print('\n')
 ineqAverFactor = Decimal(input("Enter the inequality aversion factor (suggested range 1.1-1.7): "))
 
 # parse global warming data from the climate model
@@ -130,7 +127,7 @@ plt.figure(figsize=(7,4))
 
 # Plot the carbon emissions
 plt.subplot(2, 1, 1)
-plt.plot(range(yearInit, yearInit + len(emissionsList)), emissionsList, '#636363', label='Carbon Emissions')
+plt.plot(range(yearInit, yearInit + len(emissionsList)), emissionsList, '#8B0000', label='Carbon Emissions')
 plt.xlabel('Year')
 plt.ylabel('Carbon Emissions')
 plt.title('Carbon Emissions Over Time')
@@ -145,7 +142,7 @@ plt.fill_between(years, welfareList, color='grey', alpha=0.5)
 plt.xlabel('Year')
 plt.ylabel('Social Welfare')
 plt.title('Social Welfare Over Time')
-plt.legend([f'Social cost of carbon: {SCC} dollars per ton of CO2'], loc='center right')
+plt.legend([f'Social cost of carbon: {SCC} dollars per ton of CO2'], loc='upper right')
 plt.grid(True)
 
 plt.tight_layout()

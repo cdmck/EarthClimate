@@ -1,0 +1,10 @@
+This project expands a group final assignment in Professor Ian Bourg's CEE207/ENV207 - Introduction to Environmental 
+Engineering - that created an Earth system model coupling the water, carbon, and heat cycles to accurately depict climate 
+change over the next several thousand years and ultimately relating these climate parameters to calculate the social cost of
+carbon based on other economic parameters.
+
+I worked with Joey Forzani, Anders Oja, Lucia Achucarro, and Abigail Roberts on the original project.
+
+From this starting point, I implemented the Excel calculations using popular Python libraries to enhance their accuracy while 
+adding features to visualize the impacts of economic parameters on the amount of carbon emitted into the atmosphere over time
+and the social cost of carbon and making it easier to change these parameters and notice the impacts quickly
