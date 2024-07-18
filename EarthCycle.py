@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,7 +9,10 @@ from decimal import Decimal, getcontext
 getcontext().prec = 20
 
 # load the earth climate model
-df = pd.read_excel('C:\\Users\\cmcke\\OneDrive\\Desktop\\COS\\personal\\earthmodel.xlsx', sheet_name='Model', header=3)
+load_dotenv()
+excel_path = os.getenv('EXCEL_PATH')
+print(excel_path)
+df = pd.read_excel(excel_path, sheet_name='Model', header=3)
 
 # Command line arguments
 mu = Decimal(input("Enter the fractions of emissions avoided, mu (suggested range 0.01-0.10): "))
