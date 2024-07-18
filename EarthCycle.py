@@ -11,7 +11,6 @@ getcontext().prec = 20
 # load the earth climate model
 load_dotenv()
 excel_path = os.getenv('EXCEL_PATH')
-print(excel_path)
 df = pd.read_excel(excel_path, sheet_name='Model', header=3)
 
 # Command line arguments
